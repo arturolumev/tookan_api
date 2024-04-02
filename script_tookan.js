@@ -11,7 +11,7 @@ const config = {
   user: "kuky",
   password: "Kf123456",
   server: "3.144.237.208",
-  database: "prueba_kflor",
+  database: "kflor",
   options: {
     encrypt: false, // Si estás utilizando Azure, establece esto en true
   },
@@ -332,7 +332,7 @@ obtenerPedidos()
           direccion_final: pedido.direccion_final,
           direccion_referencia: pedido.direccion_referencia,
           email_comprador: pedido.email_comprador,
-          nombre_destinatario: "Pedido de Prueba " + pedido.nombre_destinatario,
+          nombre_destinatario: pedido.nombre_destinatario,
           telefono_comprador: pedido.telefono_comprador,
           hora_deliv: fecha,
           // //////////////////////////////////
@@ -340,14 +340,12 @@ obtenerPedidos()
           order_id: "SO" + pedido.order_id, // Usar el order_id del pedido actual
           job_description:
             tipo_entrega === "EXPRESS"
-              ? "Pedido de Prueba Express - " +
-                pedido.TaskDescripcion +
+              ? pedido.TaskDescripcion +
                 ", " +
                 distrito +
                 " - Ref: " +
                 pedido.referencia
-              : "Pedido de Prueba " +
-                rangoEnviar +
+              : rangoEnviar +
                 " - " +
                 pedido.TaskDescripcion +
                 ", " +
@@ -355,16 +353,16 @@ obtenerPedidos()
                 " - Ref: " +
                 pedido.referencia, // Modificar el job_description según el tipo de entrega
           job_pickup_phone: pedido.telefono_comprador,
-          job_pickup_name: "Pedido de Prueba " + pedido.nombre_destinatario,
+          job_pickup_name: pedido.nombre_destinatario,
           job_pickup_email: pedido.email_comprador
             ? pedido.email_comprador
             : "No se proporcionó email",
-          job_pickup_address: "Pedido de Prueba " + pedido.direccion_final,
+          job_pickup_address: pedido.direccion_final,
           job_pickup_latitude: "",
           job_pickup_longitude: "",
           // job_pickup_datetime: fecha,
           job_delivery_datetime: fecha, // Convertir la fecha y hora
-          pickup_custom_field_template: "Prueba",
+          pickup_custom_field_template: "Pedidos para enviar",
           team_id: "",
           auto_assignment: "0",
           has_pickup: "0",

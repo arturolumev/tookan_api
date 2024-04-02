@@ -25,43 +25,44 @@ async function obtenerPedidos() {
 
     // Consulta para seleccionar los datos de la tabla
     const result = await sql.query(`
-      SELECT 
-          -- task descripcion: (rango o express) - direccion - referencia 
-          'Dir: ' + VC.DireccionEntrega as TaskDescripcion,
-          VC.Observaciones as referencia, 
-          VC.DeliveryTurnoID rango,
-          VC.PedidoID order_id, 
-          Prod.Descripcion nombre_producto, 
-          VC.Referencia descripcion, 
-          VPD.preciounitario precio_unitario, 
-              VPD.cantidad cantidad,
-              VC.DireccionEntrega direccion_final,
-              VC.Observaciones direccion_referencia, 
-              VC.ContactoTelefono telefono_comprador, 
-              P.email email_comprador, 
-              P.Personeria nombre_destinatario,
-              -- VC.FechaEntrega job_pickup_datetime,
-          CONCAT(
-            RIGHT('00' + CAST(MONTH(VC.FechaEntrega) AS VARCHAR(2)), 2), 
-            '-', 
-            RIGHT('00' + CAST(DAY(VC.FechaEntrega) AS VARCHAR(2)), 2), 
-            '-', 
-            YEAR(VC.FechaEntrega)
-          ) AS job_pickup_datetime,
-          VC.TookanID
-      FROM 
-          VentaPedidoCabecera VC 
-          LEFT JOIN Personeria P ON VC.PersoneriaID = P.PersoneriaID
-          LEFT JOIN ventaguiacabecera VGC ON VC.PedidoID = VGC.ReferenciaID
-          LEFT JOIN VentaPedidoDetalle VPD ON VPD.PedidoID = VC.PedidoID
-          LEFT JOIN Producto Prod ON Prod.ProductoID = VPD.ProductoID
-      WHERE 
-          VC.TipoEntrega = 2
-          AND VC.PedidoID = VGC.ReferenciaID
-          AND VC.FechaEntrega >= DATEADD(DAY, DATEDIFF(DAY, 0, GETDATE()), 0)
-          -- AND VC.PedidoID = 2366
-          AND VC.TookanID IS NULL
-      ORDER BY VC.PedidoID;
+    SELECT 
+    -- task descripcion: (rango o express) - direccion - referencia 
+    'Dir: ' + VC.DireccionEntrega as TaskDescripcion,
+    VC.Observaciones as referencia, 
+    VC.DeliveryTurnoID rango,
+    VC.PedidoID order_id, 
+    Prod.Descripcion nombre_producto, 
+    VC.Referencia descripcion, 
+    VPD.preciounitario precio_unitario, 
+    VPD.cantidad cantidad,
+    VC.DireccionEntrega direccion_final,
+    VC.Observaciones direccion_referencia, 
+    VC.ContactoTelefono telefono_comprador, 
+    P.email email_comprador, 
+    P.Personeria nombre_destinatario,
+    CONCAT(
+        YEAR(VC.FechaEntrega),
+        '-', 
+        RIGHT('00' + CAST(MONTH(VC.FechaEntrega) AS VARCHAR(2)), 2), 
+        '-', 
+        RIGHT('00' + CAST(DAY(VC.FechaEntrega) AS VARCHAR(2)), 2)
+    ) AS job_pickup_datetime,
+    VC.TookanID
+FROM 
+    VentaPedidoCabecera VC 
+    LEFT JOIN Personeria P ON VC.PersoneriaID = P.PersoneriaID
+    LEFT JOIN ventaguiacabecera VGC ON VC.PedidoID = VGC.ReferenciaID
+    LEFT JOIN VentaPedidoDetalle VPD ON VPD.PedidoID = VC.PedidoID
+    LEFT JOIN Producto Prod ON Prod.ProductoID = VPD.ProductoID
+WHERE 
+    VC.TipoEntrega = 2
+    AND VC.PedidoID = VGC.ReferenciaID
+    --AND VC.FechaEntrega >= DATEADD(DAY, DATEDIFF(DAY, 0, GETDATE()), 0)
+    AND YEAR(VC.FechaEntrega) = YEAR(GETDATE())
+    AND MONTH(VC.FechaEntrega) = MONTH(GETDATE())
+    AND DAY(VC.FechaEntrega) = DAY(GETDATE())
+    AND VC.TookanID IS NULL
+ORDER BY VC.PedidoID;
     `);
 
     // Convertir el resultado en formato JSON
@@ -267,6 +268,7 @@ obtenerPedidos()
         } else if (ultimoDigito == 5) {
           rangoEnviar = "Rango 3";
         }
+        console.log("EL UTIMO DIGITO ES: ", ultimoDigito);
       }
 
       pedidosAgrupados[order_id].productos.push({
@@ -281,29 +283,29 @@ obtenerPedidos()
     for (const order_id in pedidosAgrupados) {
       if (Object.hasOwnProperty.call(pedidosAgrupados, order_id)) {
         const pedido = pedidosAgrupados[order_id];
-        console.log(`Pedido con order_id ${order_id}:`);
-        console.log("Task Descripción:", pedido.TaskDescripcion);
-        console.log("Order ID:", pedido.order_id);
-        console.log("Descripción:", pedido.descripcion);
-        console.log("Dirección final:", pedido.direccion_final);
-        console.log("Dirección de referencia:", pedido.direccion_referencia);
-        console.log("Teléfono del comprador:", pedido.telefono_comprador);
-        console.log("Email del comprador:", pedido.email_comprador);
-        console.log("Nombre del destinatario:", pedido.nombre_destinatario);
-        console.log("Fecha de recogida:", pedido.job_pickup_datetime);
-        console.log("TookanID:", pedido.TookanID);
-        console.log("Productos:");
+        // console.log(`Pedido con order_id ${order_id}:`);
+        // console.log("Task Descripción:", pedido.TaskDescripcion);
+        // console.log("Order ID:", pedido.order_id);
+        // console.log("Descripción:", pedido.descripcion);
+        // console.log("Dirección final:", pedido.direccion_final);
+        // console.log("Dirección de referencia:", pedido.direccion_referencia);
+        // console.log("Teléfono del comprador:", pedido.telefono_comprador);
+        // console.log("Email del comprador:", pedido.email_comprador);
+        // console.log("Nombre del destinatario:", pedido.nombre_destinatario);
+        // console.log("Fecha de recogida:", pedido.job_pickup_datetime);
+        // console.log("TookanID:", pedido.TookanID);
+        // console.log("Productos:");
 
-        pedido.productos.forEach((producto, index) => {
-          console.log(`Producto ${index + 1}:`);
-          console.log("Nombre del producto:", producto.nombre_producto);
-          console.log("Precio unitario:", producto.precio_unitario);
-          console.log("Cantidad:", producto.cantidad);
-          console.log("Tipo de entrega:", producto.tipo_delivery); // Mostrar el tipo de entrega
-        });
+        // pedido.productos.forEach((producto, index) => {
+        //   console.log(`Producto ${index + 1}:`);
+        //   console.log("Nombre del producto:", producto.nombre_producto);
+        //   console.log("Precio unitario:", producto.precio_unitario);
+        //   console.log("Cantidad:", producto.cantidad);
+        //   console.log("Tipo de entrega:", producto.tipo_delivery); // Mostrar el tipo de entrega
+        // });
 
-        console.log("Total:", pedido.total); // Mostrar el total
-        console.log("---------------------------------------------");
+        // console.log("Total:", pedido.total); // Mostrar el total
+        // console.log("---------------------------------------------");
 
         var fecha = "";
 
@@ -340,12 +342,14 @@ obtenerPedidos()
           order_id: "SO" + pedido.order_id, // Usar el order_id del pedido actual
           job_description:
             tipo_entrega === "EXPRESS"
-              ? pedido.TaskDescripcion +
+              ? "Prueba Express - " +
+                pedido.TaskDescripcion +
                 ", " +
                 distrito +
                 " - Ref: " +
                 pedido.referencia
-              : rangoEnviar +
+              : "Pedido de Prueba - " +
+                rangoEnviar +
                 " - " +
                 pedido.TaskDescripcion +
                 ", " +
@@ -362,7 +366,7 @@ obtenerPedidos()
           job_pickup_longitude: "",
           // job_pickup_datetime: fecha,
           job_delivery_datetime: fecha, // Convertir la fecha y hora
-          pickup_custom_field_template: "Pedidos para enviar",
+          pickup_custom_field_template: "Prueba",
           team_id: "",
           auto_assignment: "0",
           has_pickup: "0",

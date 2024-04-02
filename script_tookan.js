@@ -118,7 +118,7 @@ const baseURL = `https://api.tookanapp.com/v2/`;
 
 let create_delivery = async (payload) => {
   let data = {
-    api_key: process.env.TOOKAN_API_KEY,
+    api_key: "53646285f2165e0b14497c6e521022471eedc7fa28db7c3b5d18",
     order_id: payload.order_id,
     job_description: payload.job_description,
     customer_phone: payload.job_pickup_phone,
@@ -152,7 +152,7 @@ let create_delivery = async (payload) => {
       method: "post",
       url: let_url,
       data: {
-        api_key: process.env.TOOKAN_API_KEY,
+        api_key: "53646285f2165e0b14497c6e521022471eedc7fa28db7c3b5d18",
         order_id: payload.order_id,
         job_description: payload.job_description,
         customer_phone: payload.job_pickup_phone,
@@ -342,14 +342,13 @@ obtenerPedidos()
           order_id: "SO" + pedido.order_id, // Usar el order_id del pedido actual
           job_description:
             tipo_entrega === "EXPRESS"
-              ? "Prueba Express - " +
+              ? "Express - " +
                 pedido.TaskDescripcion +
                 ", " +
                 distrito +
                 " - Ref: " +
                 pedido.referencia
-              : "Pedido de Prueba - " +
-                rangoEnviar +
+              : rangoEnviar +
                 " - " +
                 pedido.TaskDescripcion +
                 ", " +

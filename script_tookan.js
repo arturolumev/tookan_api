@@ -25,41 +25,43 @@ async function obtenerPedidos() {
 
     // Consulta para seleccionar los datos de la tabla
     const result = await sql.query(`
-    SELECT 
-    -- task descripcion: (rango o express) - direccion - referencia 
-		'Dir: ' + VC.DireccionEntrega as TaskDescripcion,
-		VC.Observaciones as referencia, 
-		VC.DeliveryTurnoID rango,
-        VC.PedidoID order_id, 
-		Prod.Descripcion nombre_producto, 
-		VC.Referencia descripcion, 
-		VPD.preciounitario precio_unitario, 
-        VPD.cantidad cantidad,
-        VC.DireccionEntrega direccion_final,
-        VC.Observaciones direccion_referencia, 
-        VC.ContactoTelefono telefono_comprador, 
-        P.email email_comprador, 
-        P.Personeria nombre_destinatario,
-        -- VC.FechaEntrega job_pickup_datetime,
-		CONCAT(
-			RIGHT('00' + CAST(MONTH(VC.FechaEntrega) AS VARCHAR(2)), 2), 
-			'-', 
-			RIGHT('00' + CAST(DAY(VC.FechaEntrega) AS VARCHAR(2)), 2), 
-			'-', 
-			YEAR(VC.FechaEntrega)
-		) AS job_pickup_datetime,
-		VC.TookanID
-    FROM 
-        VentaPedidoCabecera VC 
-        LEFT JOIN Personeria P ON VC.PersoneriaID = P.PersoneriaID
-        LEFT JOIN ventaguiacabecera VGC ON VC.PedidoID = VGC.ReferenciaID
-		LEFT JOIN VentaPedidoDetalle VPD ON VPD.PedidoID = VC.PedidoID
-		LEFT JOIN Producto Prod ON Prod.ProductoID = VPD.ProductoID
-    WHERE 
-        VC.TipoEntrega = 2
-		AND VC.PedidoID = VGC.ReferenciaID
-		AND VC.FechaEntrega >= DATEADD(DAY, DATEDIFF(DAY, 0, GETDATE()), 0)
-    ORDER BY VC.PedidoID;
+      SELECT 
+          -- task descripcion: (rango o express) - direccion - referencia 
+          'Dir: ' + VC.DireccionEntrega as TaskDescripcion,
+          VC.Observaciones as referencia, 
+          VC.DeliveryTurnoID rango,
+          VC.PedidoID order_id, 
+          Prod.Descripcion nombre_producto, 
+          VC.Referencia descripcion, 
+          VPD.preciounitario precio_unitario, 
+              VPD.cantidad cantidad,
+              VC.DireccionEntrega direccion_final,
+              VC.Observaciones direccion_referencia, 
+              VC.ContactoTelefono telefono_comprador, 
+              P.email email_comprador, 
+              P.Personeria nombre_destinatario,
+              -- VC.FechaEntrega job_pickup_datetime,
+          CONCAT(
+            RIGHT('00' + CAST(MONTH(VC.FechaEntrega) AS VARCHAR(2)), 2), 
+            '-', 
+            RIGHT('00' + CAST(DAY(VC.FechaEntrega) AS VARCHAR(2)), 2), 
+            '-', 
+            YEAR(VC.FechaEntrega)
+          ) AS job_pickup_datetime,
+          VC.TookanID
+      FROM 
+          VentaPedidoCabecera VC 
+          LEFT JOIN Personeria P ON VC.PersoneriaID = P.PersoneriaID
+          LEFT JOIN ventaguiacabecera VGC ON VC.PedidoID = VGC.ReferenciaID
+          LEFT JOIN VentaPedidoDetalle VPD ON VPD.PedidoID = VC.PedidoID
+          LEFT JOIN Producto Prod ON Prod.ProductoID = VPD.ProductoID
+      WHERE 
+          VC.TipoEntrega = 2
+          AND VC.PedidoID = VGC.ReferenciaID
+          AND VC.FechaEntrega >= DATEADD(DAY, DATEDIFF(DAY, 0, GETDATE()), 0)
+          -- AND VC.PedidoID = 2366
+          AND VC.TookanID IS NULL
+      ORDER BY VC.PedidoID;
     `);
 
     // Convertir el resultado en formato JSON
@@ -194,37 +196,6 @@ let create_delivery = async (payload) => {
   }
 };
 
-//
-
-let get_job_details_by_order_id = async (payload) => {
-  let let_url = `${baseURL}get_job_details_by_order_id`;
-  try {
-    let options = {
-      method: "post",
-      url: let_url,
-      data: {
-        api_key: process.env.TOOKAN_API_KEY,
-        order_ids: payload.order_ids,
-      },
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    let res = await axios(options);
-    if (res.status == 200) {
-      return res.data;
-    } else {
-      err.code = 5007;
-      err.message =
-        "Response from Tooken is not succeess plz check the credentials)";
-      throw err;
-    }
-  } catch (error) {
-    console.error("Error al crear la entrega:", error);
-    throw error;
-  }
-};
-
 let payloadCheckById = {
   order_ids: ["2139"],
 };
@@ -289,11 +260,11 @@ obtenerPedidos()
         const parteDecimal = pedido.rango.toString().split(".")[1]; // Obtenemos la parte decimal como cadena
         const ultimoDigito = parteDecimal.charAt(parteDecimal.length - 1);
 
-        if (ultimoDigito == 1) {
+        if (ultimoDigito == 2) {
           rangoEnviar = "Rango 1";
-        } else if (ultimoDigito == 2) {
-          rangoEnviar = "Rango 2";
         } else if (ultimoDigito == 3) {
+          rangoEnviar = "Rango 2";
+        } else if (ultimoDigito == 5) {
           rangoEnviar = "Rango 3";
         }
       }

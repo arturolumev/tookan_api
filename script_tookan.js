@@ -58,9 +58,9 @@ WHERE
     VC.TipoEntrega = 2
     AND VC.PedidoID = VGC.ReferenciaID
     --AND VC.FechaEntrega >= DATEADD(DAY, DATEDIFF(DAY, 0, GETDATE()), 0)
-    AND YEAR(VC.FechaEntrega) = YEAR(GETDATE())
-    AND MONTH(VC.FechaEntrega) = MONTH(GETDATE())
-    AND DAY(VC.FechaEntrega) = DAY(GETDATE())
+    AND YEAR(VC.FechaEntrega) >= YEAR(GETDATE())
+    AND MONTH(VC.FechaEntrega) >= MONTH(GETDATE())
+    AND DAY(VC.FechaEntrega) >= DAY(GETDATE())
     AND VC.TookanID IS NULL
 ORDER BY VC.PedidoID;
     `);

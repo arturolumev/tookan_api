@@ -357,7 +357,7 @@ obtenerPedidos()
                 " - Ref: " +
                 pedido.referencia, // Modificar el job_description según el tipo de entrega
           job_pickup_phone: pedido.telefono_comprador,
-          job_pickup_name: pedido.nombre_destinatario,
+          job_pickup_name: "Pedido de prueba " + pedido.nombre_destinatario,
           job_pickup_email: pedido.email_comprador
             ? pedido.email_comprador
             : "No se proporcionó email",
@@ -366,7 +366,7 @@ obtenerPedidos()
           job_pickup_longitude: "",
           // job_pickup_datetime: fecha,
           job_delivery_datetime: fecha, // Convertir la fecha y hora
-          pickup_custom_field_template: "Prueba",
+          pickup_custom_field_template: "Pedido de prueba",
           team_id: "",
           auto_assignment: "0",
           has_pickup: "0",

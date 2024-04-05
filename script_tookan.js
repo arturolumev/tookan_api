@@ -342,13 +342,14 @@ obtenerPedidos()
           order_id: "SO" + pedido.order_id, // Usar el order_id del pedido actual
           job_description:
             tipo_entrega === "EXPRESS"
-              ? "Express - " +
+              ? "Pedido de Prueba Express - " +
                 pedido.TaskDescripcion +
                 ", " +
                 distrito +
                 " - Ref: " +
                 pedido.referencia
-              : rangoEnviar +
+              : "Pedido de prueba " +
+                rangoEnviar +
                 " - " +
                 pedido.TaskDescripcion +
                 ", " +
@@ -360,7 +361,7 @@ obtenerPedidos()
           job_pickup_email: pedido.email_comprador
             ? pedido.email_comprador
             : "No se proporcionó email",
-          job_pickup_address: pedido.direccion_final,
+          job_pickup_address: "Pedido de prueba " + pedido.direccion_final,
           job_pickup_latitude: "",
           job_pickup_longitude: "",
           // job_pickup_datetime: fecha,

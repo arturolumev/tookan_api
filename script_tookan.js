@@ -61,7 +61,7 @@ WHERE
     AND YEAR(VC.FechaEntrega) >= YEAR(GETDATE())
     AND MONTH(VC.FechaEntrega) >= MONTH(GETDATE())
     AND DAY(VC.FechaEntrega) >= DAY(GETDATE())
-    --AND VC.TookanID IS NULL
+    AND VC.TookanID IS NULL
 ORDER BY VC.PedidoID;
     `);
 
@@ -361,7 +361,7 @@ obtenerPedidos()
           job_pickup_name: "Pedido de prueba " + pedido.nombre_destinatario,
           job_pickup_email: pedido.email_comprador
             ? "Pedido de prueba " + pedido.email_comprador
-            : "Pedido de prueba - No se proporcionó email",
+            : "Pedido de prueba No se proporcionó email",
           job_pickup_address: "Pedido de prueba " + pedido.direccion_final,
           job_pickup_latitude: "",
           job_pickup_longitude: "",

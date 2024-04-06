@@ -331,11 +331,11 @@ obtenerPedidos()
           documento_origen: "SO" + order_id,
           express: "",
           rango: rangoEnviar, //Puede tener los valores "Rango 1",  "Rango 2",  "Rango 3".
-          direccion_final: pedido.direccion_final,
-          direccion_referencia: pedido.direccion_referencia,
-          email_comprador: pedido.email_comprador,
-          nombre_destinatario: pedido.nombre_destinatario,
-          telefono_comprador: pedido.telefono_comprador,
+          direccion_final: "Pedido de prueba " + pedido.direccion_final,
+          direccion_referencia: "Pedido de prueba " + pedido.direccion_referencia,
+          email_comprador: "Pedido de prueba " + pedido.email_comprador,
+          nombre_destinatario: "Pedido de prueba " + pedido.nombre_destinatario,
+          telefono_comprador: "Pedido de prueba " + pedido.telefono_comprador,
           hora_deliv: fecha,
           // //////////////////////////////////
 
@@ -358,7 +358,7 @@ obtenerPedidos()
                 pedido.referencia, // Modificar el job_description según el tipo de entrega
           job_pickup_phone: pedido.telefono_comprador,
           job_pickup_name: "Pedido de prueba " + pedido.nombre_destinatario,
-          job_pickup_email: pedido.email_comprador
+          job_pickup_email: "Pedido de prueba " + pedido.email_comprador
             ? pedido.email_comprador
             : "No se proporcionó email",
           job_pickup_address: "Pedido de prueba " + pedido.direccion_final,

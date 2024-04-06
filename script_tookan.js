@@ -146,6 +146,55 @@ let create_delivery = async (payload) => {
   };
 
   console.log(data);
+  let let_url = `${baseURL}create_task`;
+  try {
+    let options = {
+      method: "post",
+      url: let_url,
+      data: {
+        api_key: "53646285f2165e0b14497c6e521022471eedc7fa28db7c3b5d18",
+        order_id: payload.order_id,
+        job_description: payload.job_description,
+        customer_phone: payload.job_pickup_phone,
+        customer_username: payload.job_pickup_name,
+        customer_email: payload.job_pickup_email,
+        customer_address: payload.job_pickup_address,
+        latitude: payload.job_pickup_latitude,
+        longitude: payload.job_pickup_longitude,
+        job_delivery_datetime: payload.job_delivery_datetime,
+        custom_field_template: payload.pickup_custom_field_template,
+        // meta_data: payload.pickup_meta_data,
+        team_id: payload.team_id,
+        auto_assignment: payload.auto_assignment,
+        has_pickup: payload.has_pickup,
+        has_delivery: payload.has_delivery,
+        layout_type: payload.layout_type,
+        tracking_link: payload.tracking_link,
+        timezone: payload.timezone,
+        fleet_id: payload.fleet_id,
+        ref_images: payload.p_ref_images,
+        notify: payload.notify,
+        tags: payload.tags,
+        barcode: payload.barcode,
+        geofence: payload.geofence,
+      },
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    let res = await axios(options);
+    if (res.status == 200) {
+      return res.data;
+    } else {
+      err.code = 5007;
+      err.message =
+        "Response from Tooken is not succeess plz check the credentials)";
+      throw err;
+    }
+  } catch (error) {
+    throw error;
+  }
   
 };
 
